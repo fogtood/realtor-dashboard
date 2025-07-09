@@ -10,12 +10,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { User2, LogOut, Settings } from "lucide-react";
+import { User2, LogOut, Settings, Sun, Moon } from "lucide-react";
 import Link from "next/link";
-import { ModeToggle } from "./mode-toggle";
+import { useTheme } from "next-themes";
 
 const ProfileDropdown = () => {
   const [open, setOpen] = useState(false);
+  const { theme, setTheme, systemTheme } = useTheme();
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const isDark = currentTheme === "dark";
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -68,7 +72,7 @@ const ProfileDropdown = () => {
           >
             <Button
               variant="ghost"
-              className="flex items-center justify-start gap-3 hover:!border-0"
+              className="flex items-center justify-start gap-3 hover:!ring-0"
             >
               <LogOut className="group-hover:text-[#475BE8] size-4.5" />
               Logout
@@ -78,8 +82,16 @@ const ProfileDropdown = () => {
           <DropdownMenuItem
             asChild
             className="group hover:!text-[#475BE8] cursor-pointer !bg-transparent p-2.5 text-sm font-semibold"
+            onSelect={() => setTheme(isDark ? "light" : "dark")}
           >
-            <ModeToggle />
+            <button type="button">
+              {isDark ? (
+                <Sun className="group-hover:text-[#475BE8] size-4.5" />
+              ) : (
+                <Moon className="group-hover:text-[#475BE8] size-4.5" />
+              )}
+              {isDark ? "Light Mode" : "Dark Mode"}
+            </button>
           </DropdownMenuItem>
         </div>
       </DropdownMenuContent>
