@@ -34,7 +34,7 @@ export default function CustomInput<T extends FieldValues>({
           <FormControl>
             <Input
               placeholder={placeholder}
-              className="border-[#E4E4E4] !text-base dark:border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4]"
+              className="border-[#E4E4E4] !text-base dark:border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4] aria-invalid:ring-0 aria-invalid:!border-destructive"
               autoComplete={
                 name === "password" ? "current-password" : undefined
               }
