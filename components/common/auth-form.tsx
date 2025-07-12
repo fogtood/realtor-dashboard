@@ -86,6 +86,7 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
                   form={form}
                   name="name"
                   label="Name"
+                  type="text"
                   placeholder="Enter your name"
                 />
               )}
@@ -94,6 +95,7 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
                 form={form}
                 name="email"
                 label="Email"
+                type="email"
                 placeholder="Enter your email"
               />
 
@@ -101,7 +103,8 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
                 form={form}
                 name="password"
                 label="Password"
-                placeholder="**********"
+                type="password"
+                placeholder="••••••"
               />
             </div>
 

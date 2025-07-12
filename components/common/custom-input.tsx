@@ -1,3 +1,5 @@
+import type { InputHTMLAttributes } from "react";
+
 import {
   FormControl,
   FormField,
@@ -7,12 +9,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Control, FieldPath, FieldValues } from "react-hook-form";
 
+type InputType = InputHTMLAttributes<HTMLInputElement>["type"];
+
 interface CustomInputProps<T extends FieldValues> {
   form: {
     control: Control<T>;
   };
   name: FieldPath<T>;
   label: string;
+  type: InputType;
   placeholder?: string;
 }
 
@@ -20,6 +25,7 @@ export default function CustomInput<T extends FieldValues>({
   form,
   name,
   label,
+  type,
   placeholder,
 }: CustomInputProps<T>) {
   return (
@@ -33,8 +39,9 @@ export default function CustomInput<T extends FieldValues>({
           </FormLabel>
           <FormControl>
             <Input
+              type={type}
               placeholder={placeholder}
-              className="border-[#E4E4E4] !text-base dark:border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4] aria-invalid:ring-0 aria-invalid:!border-destructive"
+              className="border-[#E4E4E4] !text-base dark:border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4] aria-invalid:ring-0 aria-invalid:!border-destructive aria-invalid:text-destructive aria-invalid:placeholder-destructive"
               autoComplete={
                 name === "password" ? "current-password" : undefined
               }
