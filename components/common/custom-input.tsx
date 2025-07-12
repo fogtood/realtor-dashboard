@@ -34,14 +34,14 @@ export default function CustomInput<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <div className="grid gap-2">
-          <FormLabel className="!text-sm font-medium text-secondary">
+          <FormLabel className="!text-sm font-medium !text-secondary">
             {label}
           </FormLabel>
           <FormControl>
             <Input
               type={type}
               placeholder={placeholder}
-              className="border-[#E4E4E4] !text-base dark:border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4] aria-invalid:ring-0 aria-invalid:!border-destructive aria-invalid:text-destructive aria-invalid:placeholder-destructive"
+              className="!border-[#E4E4E4] !text-base dark:!border-[#272B30] !shadow-none h-auto p-3 rounded-xl text-secondary placeholder:text-primary focus-visible:ring-ring/0 focus-visible:border-[#E4E4E4] aria-invalid:ring-0"
               autoComplete={
                 name === "password" ? "current-password" : undefined
               }
