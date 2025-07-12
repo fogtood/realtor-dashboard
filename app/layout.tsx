@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { ThemeProvider } from "@/components/common/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const manRope = Manrope({
@@ -31,6 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster richColors position="top-center" />
         </ThemeProvider>
       </body>
     </html>

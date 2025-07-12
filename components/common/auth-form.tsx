@@ -6,16 +6,18 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 import { authSchema } from "@/lib/schemas/auth-schema";
-// import API from "@/config/axios";
 
 import CustomInput from "@/components/common/custom-input";
 import google from "@/assets/svg/google.svg";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
   const router = useRouter();
@@ -30,14 +32,33 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    router.push("/dashboard");
-  }
+  const { isSubmitting } = form.formState;
 
-  async function googleSignIn() {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (type === "sign-in") {
+      try {
+        const data = await signIn(values);
+        console.log("Signed in:", data);
+        router.push("/dashboard");
+      } catch (error) {
+        console.error("Error signing in:", error);
+        toast.error((error as Error).message);
+      }
+    }
+
+    if (type === "sign-up") {
+      try {
+        const data = await signUp(values);
+        console.log("Signed up:", data);
+        router.push("/dashboard");
+      } catch (error) {
+        console.error("Error signing up:", error);
+        toast.error((error as Error).message);
+      }
+    }
+  };
+
+  function googleSignIn() {
     window.location.href = "http://localhost:8080/api/v1/auth/google";
   }
 
@@ -98,8 +119,17 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
             <Button
               type="submit"
               className="!bg-[#475BE8] text-[#FCFCFC] w-full cursor-pointer py-3 h-auto rounded-xl"
+              disabled={isSubmitting}
             >
-              {type === "sign-in" ? "Sign in" : "Create account"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={20} className="animate-spin" /> Loading...
+                </>
+              ) : type === "sign-in" ? (
+                "Sign In"
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
           <Button
@@ -107,6 +137,7 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
             variant="outline"
             className="cursor-pointer w-full text-[#11142D] dark:text-secondary py-3 h-auto rounded-xl"
             onClick={googleSignIn}
+            disabled={isSubmitting}
           >
             <Image src={google} height={24} width={24} alt="Google" />
             Sign {type === "sign-in" ? "in" : "up"} with Google
