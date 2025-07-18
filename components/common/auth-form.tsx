@@ -17,11 +17,14 @@ import { authSchema } from "@/lib/schemas/auth-schema";
 
 import CustomInput from "@/components/common/custom-input";
 import google from "@/assets/svg/google.svg";
-import { signIn, signUp } from "@/lib/actions/user.actions";
+import API from "@/config/axios";
+import useUserStore from "@/store/user";
+import { AxiosError } from "axios";
 
 export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
   const router = useRouter();
   const formSchema = authSchema(type);
+  const setUser = useUserStore((state) => state.setUser);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,23 +40,27 @@ export default function AuthForm({ type }: { type: "sign-in" | "sign-up" }) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (type === "sign-in") {
       try {
-        const data = await signIn(values);
-        console.log("Signed in:", data);
+        const { data } = await API.post("/auth/sign-in", values);
+        setUser(data.user);
+        // console.log("Signed in:", data.user);
         router.push("/dashboard");
       } catch (error) {
         console.error("Error signing in:", error);
-        toast.error((error as Error).message);
+        const err = error as AxiosError<{ error: string }>;
+        toast.error(err.response?.data?.error || "An error occurred.");
       }
     }
 
     if (type === "sign-up") {
       try {
-        const data = await signUp(values);
-        console.log("Signed up:", data);
+        const { data } = await API.post("/auth/sign-up", values);
+        setUser(data.user);
+        // console.log("Signed up:", data);
         router.push("/dashboard");
       } catch (error) {
         console.error("Error signing up:", error);
-        toast.error((error as Error).message);
+        const err = error as AxiosError<{ error: string }>;
+        toast.error(err.response?.data?.error || "An error occurred.");
       }
     }
   };
